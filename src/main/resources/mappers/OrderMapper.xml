@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grade.mapper.OrderMapper">
+  <resultMap id="BaseResultMap" type="com.grade.entity.Order">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="task_id" jdbcType="INTEGER" property="task_id" />
+    <result column="task_name" jdbcType="VARCHAR" property="task_name" />
+    <result column="order_id" jdbcType="VARCHAR" property="order_id" />
+    <result column="package_name" jdbcType="VARCHAR" property="package_name" />
+    <result column="app_code" jdbcType="VARCHAR" property="app_code" />
+    <result column="appsign" jdbcType="VARCHAR" property="appsign" />
+    <result column="ctime" jdbcType="VARCHAR" property="ctime" />
+    <result column="deviceid" jdbcType="VARCHAR" property="deviceid" />
+    <result column="event" jdbcType="VARCHAR" property="event" />
+    <result column="merid" jdbcType="VARCHAR" property="merid" />
+    <result column="mername" jdbcType="VARCHAR" property="mername" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="money" jdbcType="DECIMAL" property="money" />
+    <result column="sign" jdbcType="VARCHAR" property="sign" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, task_id, task_name, order_id, package_name, app_code, appsign, ctime, deviceid, 
+    event, merid, mername, price, money, sign
+  </sql>
+  <select id="selectByExample" parameterType="com.grade.entity.OrderExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'false' as QUERYID,
+    <include refid="Base_Column_List" />
+    from g_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from g_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from g_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.grade.entity.Order" useGeneratedKeys="true">
+    insert into g_order (task_id, task_name, order_id, 
+      package_name, app_code, appsign, 
+      ctime, deviceid, event, 
+      merid, mername, price, 
+      money, sign)
+    values (#{task_id,jdbcType=INTEGER}, #{task_name,jdbcType=VARCHAR}, #{order_id,jdbcType=VARCHAR}, 
+      #{package_name,jdbcType=VARCHAR}, #{app_code,jdbcType=VARCHAR}, #{appsign,jdbcType=VARCHAR}, 
+      #{ctime,jdbcType=VARCHAR}, #{deviceid,jdbcType=VARCHAR}, #{event,jdbcType=VARCHAR}, 
+      #{merid,jdbcType=VARCHAR}, #{mername,jdbcType=VARCHAR}, #{price,jdbcType=DECIMAL}, 
+      #{money,jdbcType=DECIMAL}, #{sign,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.grade.entity.Order" useGeneratedKeys="true">
+    insert into g_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="task_id != null">
+        task_id,
+      </if>
+      <if test="task_name != null">
+        task_name,
+      </if>
+      <if test="order_id != null">
+        order_id,
+      </if>
+      <if test="package_name != null">
+        package_name,
+      </if>
+      <if test="app_code != null">
+        app_code,
+      </if>
+      <if test="appsign != null">
+        appsign,
+      </if>
+      <if test="ctime != null">
+        ctime,
+      </if>
+      <if test="deviceid != null">
+        deviceid,
+      </if>
+      <if test="event != null">
+        event,
+      </if>
+      <if test="merid != null">
+        merid,
+      </if>
+      <if test="mername != null">
+        mername,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="money != null">
+        money,
+      </if>
+      <if test="sign != null">
+        sign,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="task_id != null">
+        #{task_id,jdbcType=INTEGER},
+      </if>
+      <if test="task_name != null">
+        #{task_name,jdbcType=VARCHAR},
+      </if>
+      <if test="order_id != null">
+        #{order_id,jdbcType=VARCHAR},
+      </if>
+      <if test="package_name != null">
+        #{package_name,jdbcType=VARCHAR},
+      </if>
+      <if test="app_code != null">
+        #{app_code,jdbcType=VARCHAR},
+      </if>
+      <if test="appsign != null">
+        #{appsign,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null">
+        #{ctime,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceid != null">
+        #{deviceid,jdbcType=VARCHAR},
+      </if>
+      <if test="event != null">
+        #{event,jdbcType=VARCHAR},
+      </if>
+      <if test="merid != null">
+        #{merid,jdbcType=VARCHAR},
+      </if>
+      <if test="mername != null">
+        #{mername,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="money != null">
+        #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="sign != null">
+        #{sign,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.grade.entity.Order">
+    update g_order
+    <set>
+      <if test="task_id != null">
+        task_id = #{task_id,jdbcType=INTEGER},
+      </if>
+      <if test="task_name != null">
+        task_name = #{task_name,jdbcType=VARCHAR},
+      </if>
+      <if test="order_id != null">
+        order_id = #{order_id,jdbcType=VARCHAR},
+      </if>
+      <if test="package_name != null">
+        package_name = #{package_name,jdbcType=VARCHAR},
+      </if>
+      <if test="app_code != null">
+        app_code = #{app_code,jdbcType=VARCHAR},
+      </if>
+      <if test="appsign != null">
+        appsign = #{appsign,jdbcType=VARCHAR},
+      </if>
+      <if test="ctime != null">
+        ctime = #{ctime,jdbcType=VARCHAR},
+      </if>
+      <if test="deviceid != null">
+        deviceid = #{deviceid,jdbcType=VARCHAR},
+      </if>
+      <if test="event != null">
+        event = #{event,jdbcType=VARCHAR},
+      </if>
+      <if test="merid != null">
+        merid = #{merid,jdbcType=VARCHAR},
+      </if>
+      <if test="mername != null">
+        mername = #{mername,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="money != null">
+        money = #{money,jdbcType=DECIMAL},
+      </if>
+      <if test="sign != null">
+        sign = #{sign,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.grade.entity.Order">
+    update g_order
+    set task_id = #{task_id,jdbcType=INTEGER},
+      task_name = #{task_name,jdbcType=VARCHAR},
+      order_id = #{order_id,jdbcType=VARCHAR},
+      package_name = #{package_name,jdbcType=VARCHAR},
+      app_code = #{app_code,jdbcType=VARCHAR},
+      appsign = #{appsign,jdbcType=VARCHAR},
+      ctime = #{ctime,jdbcType=VARCHAR},
+      deviceid = #{deviceid,jdbcType=VARCHAR},
+      event = #{event,jdbcType=VARCHAR},
+      merid = #{merid,jdbcType=VARCHAR},
+      mername = #{mername,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      money = #{money,jdbcType=DECIMAL},
+      sign = #{sign,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

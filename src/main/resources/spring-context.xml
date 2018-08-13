@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+       default-lazy-init="true">
+
+    <description>Spring Configuration</description>
+    <context:property-placeholder ignore-unresolvable="true" location="classpath:jdbc.properties" />
+    <!--<util:properties id="configProperties" location="classpath:grade.properties"></util:properties>-->
+    <!-- 使用Annotation自动注册Bean，解决事物失效问题：
+        在主容器中不扫描@Controller注解，在SpringMvc中只扫描@Controller注解。
+ -->
+    <!-- base-package 如果多个，用“,”分隔 -->
+    <context:component-scan base-package="com.grade">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <bean id="dataSourceHikari" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+        <property name="driverClassName" value="${db.driverClassName}"/>
+        <property name="jdbcUrl" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+
+        <!-- 连接池的最大值 -->
+        <property name="maximumPoolSize" value="${db.maxActive}"/>
+        <!-- 最小空闲值.当空闲的连接数少于阀值时，连接池就会预申请去一些连接，以免洪峰来时来不及申请 -->
+        <property name="minimumIdle" value="${db.minIdle}"/>
+        <property name="connectionTimeout" value="${db.minEvictableIdleTimeMillis}"/>
+        <!--# 检查连接有效性的SQL语句-->
+        <property name="connectionTestQuery" value="SELECT 1 FROM dual"/>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSourceHikari"/>
+        <property name="mapperLocations" value="classpath*:mappers/*Mapper.xml"></property>
+    </bean>
+
+    <bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.grade.mapper"/>
+    </bean>
+
+    <!-- 使用@Transactional进行声明式事务管理需要声明下面这行 -->
+    <!--<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />-->
+    <!-- 事务管理 -->
+    <!--<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
+    <!--<property name="dataSource" ref="dataSource"/>-->
+    <!--<property name="rollbackOnCommitFailure" value="true"/>-->
+    <!--</bean>-->
+</beans>
